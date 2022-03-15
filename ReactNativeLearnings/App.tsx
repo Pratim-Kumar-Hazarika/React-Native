@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 /**
  * Sample React Native App
@@ -12,19 +13,28 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  Button,
+  Pressable,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 
-
-const App = () => {
-
+export  function MyButton(props:any) {
+  const { onPress, title } = props;
   return (
-    <View style={[styles.container, styles.horizontal]}>
-    <ActivityIndicator animating={false} />
-    <ActivityIndicator size="large" />
-    <ActivityIndicator size="small" color="#0000ff" />
-    <ActivityIndicator size="large" color="#00ff00" />
+    <Pressable style={styles.button} onPress={onPress}>
+      <Text style={styles.text}>{title}</Text>
+    </Pressable>
+  );
+}
+const App = () => {
+  function clickHandler(){
+    console.log("clicked")
+  }
+  return (
+    <View style={[styles.container]}>
+    <MyButton onPress={clickHandler} title={'I AM BUTTON'}/>
   </View>
   );
 };
@@ -33,12 +43,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor:"white"
+    backgroundColor:"white",
+
   },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
-  }
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding:5,
+    backgroundColor: '#6366f1',
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
 });
 export default App;
