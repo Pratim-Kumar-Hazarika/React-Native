@@ -9,7 +9,12 @@ import {
   StatusBar,
   Image,
   Dimensions,
+  ImageBackground,
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
+import {  KeyboardAvoidingView, TextInput, Platform, TouchableWithoutFeedback, Button, Keyboard  } from 'react-native';
+
 
 const DATA = [
   {
@@ -102,6 +107,7 @@ const data1 = [{
   title: 'Third Item',
 }];
 const w = Dimensions.get('window');
+const image = { uri: "https://reactjs.org/logo-og.png" };
 const Item = ({title}: any) => {
   //  const [url,setUrl] = useState<any>()
   const [onLoadImage, setLoadImage] = useState(false);
@@ -119,15 +125,9 @@ const Item = ({title}: any) => {
 
  return  <View style={styles.item} >
     <Text style={styles.title}>{title}</Text>
-    <Image
-      style={{ height: 300, width: 300 }}
-      accessibilityLabel="test"
-      defaultSource={require("./bmw.jpeg")}
-      resizeMode="cover"
-      onLoadStart={pictureLoading}
-      onLoad={pictureLoaded}
-      source={onLoadImage ? { uri: `https://images.pexels.com/photos/671557/pexels-photo-671557.jpeg?w=${w.width * 2}&buster=${Math.random()}` } : require('./bmw.jpeg')}
-    />
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      <Text style={styles.text}>Something</Text>
+    </ImageBackground>
   </View>;
 };
 function emptyComponentMessage(){
@@ -137,44 +137,95 @@ function emptyComponentMessage(){
 }
 const App = () => {
 
-  const [data,setData] = useState(DATA);
-  //@ts-ignore
-  function renderItem({index}) {
-    return <Item title={index} />;
-  }
- function listEndTriggerHandler(){
-   setTimeout(()=>{
-       setData((prev)=>[...prev,...data1]);
-   },2000);
-
- }
+ 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        ListEmptyComponent={emptyComponentMessage}
-        keyExtractor={item => item.id}
-        onEndReached={listEndTriggerHandler}
-      />
-    </SafeAreaView>
+    <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+        <ScrollView>
+          <Text style={styles.header}>Login</Text>
+          <TextInput placeholderTextColor={"gray"} placeholder="email" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          /><TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+          <TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          /><TextInput placeholderTextColor={"gray"} placeholder="Password" style={styles.textInput} 
+          />
+            </ScrollView>
+          <TouchableOpacity style={styles.appButtonContainer} onPress={() => null}>
+          <Text style={styles.appButtonText}>Login</Text>
+          </TouchableOpacity>
+        
+        </View>
+      </TouchableWithoutFeedback>
+     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    backgroundColor:"white"
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: "space-around",
+    backgroundColor:"white"
   },
-  title: {
-    fontSize: 32,
+  header: {
+    fontSize: 36,
+    marginBottom: 48
   },
+  textInput: {
+    height: 40,
+    borderColor: "black",
+    borderBottomWidth: 1,
+    marginBottom: 36,
+    color:"black",
+  
+  },
+  btnContainer: {
+    backgroundColor: "white",
+    marginTop: 12,
+    color:"red"
+  },
+  appButtonContainer: {
+ 
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+  
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  }
 });
 
 export default App;
