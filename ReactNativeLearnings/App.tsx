@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,7 @@ import {
   Text,
   StatusBar,
   Image,
+  Dimensions,
 } from 'react-native';
 
 const DATA = [
@@ -100,14 +101,32 @@ const data1 = [{
   id: '58694a0f-ddd-471f-bd9d6wwwwq3-145571e29d72',
   title: 'Third Item',
 }];
-
+const w = Dimensions.get('window');
 const Item = ({title}: any) => {
- return  <View style={styles.item}>
+  //  const [url,setUrl] = useState<any>()
+  const [onLoadImage, setLoadImage] = useState(false);
+ 
+  const imageLoading = () => {
+    setLoadImage(true);
+  }
+  function pictureLoading(){
+    console.log("picture loadingg")
+  }
+  function pictureLoaded(){
+    imageLoading()
+    console.log("picture loadded")
+  }
+
+ return  <View style={styles.item} >
     <Text style={styles.title}>{title}</Text>
     <Image
       style={{ height: 300, width: 300 }}
-      source={{uri:"https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" }} //using uri property for images from web
-      resizeMode="contain"
+      accessibilityLabel="test"
+      defaultSource={require("./bmw.jpeg")}
+      resizeMode="cover"
+      onLoadStart={pictureLoading}
+      onLoad={pictureLoaded}
+      source={onLoadImage ? { uri: `https://images.pexels.com/photos/671557/pexels-photo-671557.jpeg?w=${w.width * 2}&buster=${Math.random()}` } : require('./bmw.jpeg')}
     />
   </View>;
 };
