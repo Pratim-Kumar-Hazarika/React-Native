@@ -1,105 +1,103 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import {View, Text, Button, Image} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-function LogoTitle({props}:any) {
-  // console.log("yo props",{props})
+import { Button, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const data = [
+  {
+    id:"1",
+    comments:"hello 1",
+    nextId:"2"
+  },
+  {
+    id:"2",
+    comments:"hello 2",
+    nextId:"3"
+  },
+  {
+    id:"3",
+    comments:"hello 3",
+    nextId:"4" 
+  },
+  {
+    id:"4",
+    comments:"hello 4",
+  }
+]
+
+function CommentScreen({navigation,route}) {
+  console.log("here",route.params)
+  const obj = data.find((item)=>item.id === route.params?.id)
+  console.log({obj})
   return (
-    <Image
-      style={{ width: 50, height: 50 }}
-      source={require('./img.png')}
-    />
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>{obj?.comments}</Text>
+      <Button
+        title="Inside Comment"
+        onPress={() => navigation.push('Comments',{id:obj?.nextId})}
+      />
+    </View>
   );
 }
-function HomeScreen({navigation}) {
-  console.log({navigation});
-    return (
-        <View
-            style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            <Text>Home Screen</Text>
-            <Button
-        title="Go to Products"
-        onPress={() => navigation.push('Product',{id:"pratim"})}
-      />
-        </View>
-    );
-}
-function DetailsScreen({navigation}) {
-    return (
-        <View
-            style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            <Text>Details Screen</Text>
 
-        </View>
-    );
-}
-function ProductScreen({route,navigation}) {
-  const params = route.params;
-  console.log({params});
+function HomeScreen({ navigation }) {
   return (
-      <View
-          style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-      }}>
-          <Text>Product Screen</Text>
-          <Button
-        title="Go to Products from Product Screen"
-        onPress={() => navigation.push('Product')}
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Hey I am A Tweet ( Goodnight)</Text>
+      <Button
+        title="Click on tweet"
+        onPress={() => navigation.navigate('Comments',{id:"1"})}
       />
-         <Button
-        title="Go to First Screen  navigation.popToTop(`Home`)"
-        onPress={() => navigation.popToTop('Home')}
-      />
-      </View>
+    </View>
   );
 }
-const Stack = createNativeStackNavigator();
 
-function App() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-        headerStyle: {
-          backgroundColor: 'pink',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}>
-                <Stack.Screen
-                    name="Home"
-                    component={HomeScreen}
-                    options={{ headerTitle: (props) => <LogoTitle {...props} />,
-                    headerRight: () => (
-                      <Button
-                        onPress={() => console.log('This is a button!')}
-                        title="Info"
-                        color="#fff"
-                      />
-                    ),
-          
-                    }}
-/>
-                <Stack.Screen name="Product" options={{
-                    title: 'Products',
-                }} component={ProductScreen}/>
-                <Stack.Screen name="Details" component={DetailsScreen}/>
-
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+function NotificationOfUsers({ navigation }) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Notifications will be shown</Text>
+      {/* <Button
+        title="Click to go to type of notification screen"
+        onPress={() => navigation.navigate('Details')}
+      /> */}
+    </View>
+  );
 }
 
-export default App;
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Comments" component={CommentScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+const SettingsStack = createNativeStackNavigator();
+
+function NotificationScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Notification" component={NotificationOfUsers} />
+      <SettingsStack.Screen name="Comments" component={CommentScreen} />
+    </SettingsStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name="Feed" component={HomeStackScreen} />
+        <Tab.Screen name="Notification" component={NotificationScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
